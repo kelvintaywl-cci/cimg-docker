@@ -26,7 +26,7 @@ jobs:
           name: Install Compose Switch
           command: |
             # https://docs.docker.com/compose/cli-command/#compose-switch
-            curl -fL https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+            sudo curl -fL https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
       - verify-docker-compose-v1
 
 workflows:
