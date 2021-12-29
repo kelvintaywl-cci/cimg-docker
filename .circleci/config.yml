@@ -1,11 +1,35 @@
 version: 2.1
 
+commands:
+  verify-docker-compose-v1:
+    steps:
+      - run:
+          name: Check if `docker-compose` is available
+          command: |
+            # uses || true to ensure this always passes
+            docker-compose version || true
+
 jobs:
-  build:
+  explore-docker-compose:
     docker:
       - image: cimg/base:stable
     steps:
-      - run: |
-          docker-compose --version
-          # if V2, should be supported
-          docker compose version
+      - run:
+          name: Verify Docker Compose V2 works
+          command: |
+            # Currently, Docker Compose V2 is available in cimg/base:stable.
+            # As such, `docker compose` works.
+            # https://docs.docker.com/compose/cli-command/
+            docker compose version
+      - verify-docker-compose-v1
+      - run:
+          name: Install Compose Switch
+          command: |
+            # https://docs.docker.com/compose/cli-command/#compose-switch
+            curl -fL https://raw.githubusercontent.com/docker/compose-cli/main/scripts/install/install_linux.sh | sh
+      - verify-docker-compose-v1
+
+workflows:
+  main:
+    jobs:
+      - explore-docker-compose
